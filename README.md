@@ -1,73 +1,63 @@
-# React + TypeScript + Vite
+🛒 FakeStore Shopping App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern React + TypeScript shopping application built using React Query, Redux Toolkit, and React Router.
+This project demonstrates server-state management, global client-state handling, routing, and session persistence.
 
-Currently, two official plugins are available:
+🚀 Features
+🏠 Product Catalog
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Fetches products from the FakeStore API
 
-## React Compiler
+Displays:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Title
 
-## Expanding the ESLint configuration
+Price
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Category
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Description
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Rating image
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Gracefully handles broken image URLs
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Products can be added directly to the cart
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+📂 Category Filtering
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Category dropdown is dynamically loaded from the API
+
+Selecting a category filters products in real time
+
+No hardcoded categories
+
+🛒 Shopping Cart (Redux Toolkit)
+
+Add products to cart
+
+Remove products from cart
+
+Update quantities automatically
+
+View total item count
+
+View total price
+
+Checkout clears the cart
+
+💾 Session Persistence
+
+Cart state is saved to sessionStorage
+
+Cart persists across page refreshes
+
+Checkout clears both Redux state and session storage
+
+🌐 Routing
+
+/ → Home (Product Listing)
+
+/cart → Shopping Cart
+
+Navigation handled with React Router
