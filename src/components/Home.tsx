@@ -5,8 +5,8 @@ import CategorySelect from "../components/CategorySelect";
 import { useDispatch } from "react-redux";
 import { addItem } from "../redux/cartSlice";
 import type { AppDispatch } from "../redux/store";
-
-
+import { doc, deleteDoc } from "firebase/firestore";
+import { db } from "../firebase/firebase.config";
 
 const Home: React.FC = () => {
   const { data: products, isLoading, error } = useProducts();
@@ -17,8 +17,11 @@ const Home: React.FC = () => {
   if (error) return <div>Error: {error.message}</div>;
 
   const filteredProducts = selectedCategory
-    ? products?.filter((product: Product) => product.category === selectedCategory)
-    : products;
+  ? products?.filter((product: Product) =>
+      product.category?.toLowerCase() === selectedCategory.toLowerCase()
+    )
+  : products;
+
 
   return (
     <div>
@@ -34,21 +37,34 @@ const Home: React.FC = () => {
             <p>Category: {product.category}</p>
             <p>Price: ${product.price}</p>
             <img src={product.image} alt={product.title} width={100} />
-        <button
-            onClick={() =>
+
+            <button
+              onClick={() =>
                 dispatch(
-                    addItem({
-                        id: product.id,
-                        title: product.title,
-                        price: product.price,
-                        quantity: 1,
-                        image: product.image,
-                    })
+                  addItem({
+                    id: product.id,
+                    title: product.title,
+                    price: product.price,
+                    quantity: 1,
+                    image: product.image,
+                  })
                 )
-            }
-        >
-            Add to Cart
-        </button>
+              }
+            >
+              Add to Cart
+            </button>
+
+            <button
+              onClick={async () => {
+                await deleteDoc(doc(db, "products", product.id));
+                alert("Product Deleted!");
+
+                // 👇 OPTIONALLY force refresh React Query
+                window.location.reload();
+              }}
+            >
+              Delete Product
+            </button>
           </li>
         ))}
       </ul>

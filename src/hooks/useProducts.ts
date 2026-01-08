@@ -3,10 +3,8 @@ import axios from "axios";
 import type { Product } from "../types/product";
 
 const fetchProducts = async (): Promise<Product[]> => {
-  const response = await axios.get<Product[]>(
-    "https://fakestoreapi.com/products"
-  );
-  return response.data;
+  const res = await axios.get<Product[]>("https://fakestoreapi.com/products");
+  return res.data;
 };
 
 export const useProducts = () => {
@@ -15,5 +13,3 @@ export const useProducts = () => {
     queryFn: fetchProducts,
   });
 };
-
-export { fetchProducts };
