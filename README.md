@@ -1,63 +1,70 @@
-🛒 FakeStore Shopping App
+🛒 React + TypeScript E-Commerce App with Firebase
 
-A modern React + TypeScript shopping application built using React Query, Redux Toolkit, and React Router.
-This project demonstrates server-state management, global client-state handling, routing, and session persistence.
+A full e-commerce web application built with React, TypeScript, Redux Toolkit, and Firebase (Auth + Firestore).
 
 🚀 Features
-🏠 Product Catalog
+🔐 Authentication
 
-Fetches products from the FakeStore API
+User Signup (email + password)
 
-Displays:
+Login
 
-Title
+Logout
 
-Price
+Store user profile data in Firestore
 
-Category
+Profile page with:
 
-Description
+Display user data
 
-Rating image
+Edit profile (update Firestore)
 
-Gracefully handles broken image URLs
+Delete account (Auth + Firestore)
 
-Products can be added directly to the cart
+🛍 Product Management
 
-📂 Category Filtering
+Products loaded from FakeStore API
 
-Category dropdown is dynamically loaded from the API
-
-Selecting a category filters products in real time
-
-No hardcoded categories
-
-🛒 Shopping Cart (Redux Toolkit)
+Category dropdown filter
 
 Add products to cart
 
-Remove products from cart
+Remove item from cart
 
-Update quantities automatically
+Clear cart
 
-View total item count
+🛒 Cart & Orders (Firestore)
 
-View total price
+Cart persists inside UI state (Redux)
 
-Checkout clears the cart
+Checkout saves order to Firestore
 
-💾 Session Persistence
+Includes userId
 
-Cart state is saved to sessionStorage
+Products in cart
 
-Cart persists across page refreshes
+Total price
 
-Checkout clears both Redux state and session storage
+Timestamp
 
-🌐 Routing
+Order History page (filtered by logged-in user)
 
-/ → Home (Product Listing)
+Order Details page (click order to view items)
 
-/cart → Shopping Cart
+📦 User Order History
 
-Navigation handled with React Router
+View all previous orders
+
+Display total, date, item count
+
+Click to view order details
+
+🧱 Tech Stack
+Technology	Purpose
+React + TypeScript	Front-end UI
+React Router	Navigation
+Redux Toolkit	Global cart state
+React Query	Data fetching and caching
+FakeStore API	Product data feed
+Firebase Auth	User authentication
+Firebase Firestore	Users + Orders storage
