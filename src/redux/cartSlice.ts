@@ -25,13 +25,23 @@ const cartSlice = createSlice({
     initialState,
     reducers: {
         addItem: (state, action: PayloadAction<CartItem>) => {
-            const existingItem = state.items.find(item => item.id === action.payload.id);
+            const normalizedItem: CartItem = {
+                id: Number(action.payload.id),       // normalize id
+                title: action.payload.title,
+                price: Number(action.payload.price), // normalize price
+                quantity: Number(action.payload.quantity ?? 1),
+                image: action.payload.image,
+            };
+
+            const existingItem = state.items.find(item => item.id === normalizedItem.id);
+
             if (existingItem) {
-                existingItem.quantity += action.payload.quantity;
+                existingItem.quantity += normalizedItem.quantity;
             } else {
-                state.items.push(action.payload);
+                state.items.push(normalizedItem);
             }
         },
+
         removeItem: (state, action: PayloadAction<number>) => {
             state.items = state.items.filter(item => item.id !== action.payload);
         },
