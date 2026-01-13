@@ -9,7 +9,7 @@ export default function CategorySelect({ onCategoryChange }: CategorySelectProps
     const { data: categories, isLoading, error } = useCategories();
 
     if (isLoading) return <div>Loading categories...</div>;
-    if (error) return <div>Error loading categories: {(error as Error).message}</div>;
+    if (error) return <div>Error loading categories: {String(error)}</div>;
 
     const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
         onCategoryChange(e.target.value);
