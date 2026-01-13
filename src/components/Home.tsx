@@ -44,7 +44,7 @@ const Home: React.FC = () => {
                   addItem({
                     id: String(product.id),
                     title: product.title,
-                    price: Number(product.price),
+                    price: Number(product.price ?? 0),
                     quantity: 1,
                     image: product.image,
                   })
