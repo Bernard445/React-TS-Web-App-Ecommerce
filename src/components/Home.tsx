@@ -42,9 +42,9 @@ const Home: React.FC = () => {
               onClick={() =>
                 dispatch(
                   addItem({
-                    id: product.id,
+                    id: String(product.id),
                     title: product.title,
-                    price: product.price,
+                    price: Number(product.price),
                     quantity: 1,
                     image: product.image,
                   })
@@ -54,9 +54,11 @@ const Home: React.FC = () => {
               Add to Cart
             </button>
 
+
             <button
               onClick={async () => {
-                await deleteDoc(doc(db, "products", product.id));
+                await deleteDoc(doc(db, "products", String(product.id)));
+
                 alert("Product Deleted!");
 
                 // 👇 OPTIONALLY force refresh React Query
