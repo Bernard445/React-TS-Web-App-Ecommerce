@@ -9,7 +9,7 @@ import { doc, deleteDoc } from "firebase/firestore";
 import { db } from "../firebase/firebase.config";
 
 const Home: React.FC = () => {
-  const { data: products, isLoading, error } = useProducts();
+  const { data: products = [], isLoading, error } = useProducts();
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const dispatch = useDispatch<AppDispatch>();
 
@@ -17,11 +17,12 @@ const Home: React.FC = () => {
   if (error) return <div className="text-center mt-10">Error loading products</div>;
 
   // Filter if category selected
-  const filteredProducts = selectedCategory
-    ? products?.filter((p: Product) =>
-        p.category?.toLowerCase() === selectedCategory.toLowerCase()
-      )
-    : products;
+  const filteredProducts =
+    selectedCategory === ""
+      ? products
+      : products.filter((p) =>
+          p.category.toLowerCase() === selectedCategory.toLowerCase()
+        );
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
@@ -34,7 +35,7 @@ const Home: React.FC = () => {
 
       {/* Product Grid */}
       <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredProducts?.map((product: Product) => (
+        {filteredProducts.map((product: Product) => (
           <li
             key={product.id}
             className="border rounded-lg p-4 shadow hover:shadow-lg transition bg-white flex flex-col"
@@ -59,7 +60,7 @@ const Home: React.FC = () => {
               onClick={() =>
                 dispatch(
                   addItem({
-                    id: Number(product.id),
+                    id: product.id,               // string
                     title: product.title,
                     price: Number(product.price),
                     quantity: 1,
@@ -72,26 +73,20 @@ const Home: React.FC = () => {
               Add to Cart
             </button>
 
-            {/* Delete only Firestore */}
-            {product.source === "firestore" ? (
-              <button
-                onClick={async () => {
-                  await deleteDoc(doc(db, "products", String(product.id)));
+            {/* Delete ONLY if this product exists in Firestore */}
+            <button
+              onClick={async () => {
+                // if delete fails, ignore (API products will error)
+                try {
+                  await deleteDoc(doc(db, "products", product.id));
                   alert("Product Deleted!");
                   window.location.reload();
-                }}
-                className="bg-red-600 text-white py-1 rounded mt-2 hover:bg-red-700"
-              >
-                Delete Product
-              </button>
-            ) : (
-              <button
-                disabled
-                className="bg-gray-400 text-white py-1 rounded mt-2 cursor-not-allowed"
-              >
-                API Product
-              </button>
-            )}
+                } catch {}
+              }}
+              className="bg-red-600 text-white py-1 rounded mt-2 hover:bg-red-700"
+            >
+              Delete (Firestore only)
+            </button>
           </li>
         ))}
       </ul>

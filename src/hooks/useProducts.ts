@@ -1,38 +1,40 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase/firebase.config";
 import type { Product } from "../types/product";
+import axios from "axios";
 
 export const useProducts = () => {
   return useQuery<Product[]>({
     queryKey: ["products"],
     queryFn: async () => {
-      // 1️⃣ Get API products
-      const apiRes = await axios.get<Product[]>("https://fakestoreapi.com/products");
-      const apiProducts = apiRes.data.map((p) => ({
-        ...p,
-        id: String(p.id),        // normalize to string
-        price: Number(p.price),
-        source: "api" as const,  // identify source
-      }));
-
-      // 2️⃣ Get Firestore products
+      // Load Firestore products
       const snap = await getDocs(collection(db, "products"));
-      const fsProducts = snap.docs.map((docSnap) => {
-        const data = docSnap.data();
+      const firestoreProducts: Product[] = snap.docs.map((docSnap) => {
+        const d = docSnap.data();
         return {
-          id: Number(docSnap.id),
-          title: String(data.title),
-          description: String(data.description),
-          category: String(data.category),
-          price: Number(data.price),
-          image: String(data.image),
-          source: "firestore" as const,};
+          id: docSnap.id,                // string
+          title: String(d.title),
+          description: String(d.description),
+          category: String(d.category),
+          price: Number(d.price),
+          image: String(d.image),
+        };
       });
 
-      // 3️⃣ Combine without duplicates
-      return [...fsProducts, ...apiProducts];
+      // Load API products
+      const apiRes = await axios.get("https://fakestoreapi.com/products");
+      const apiProducts: Product[] = apiRes.data.map((p: any) => ({
+        id: String(p.id), // convert number → string
+        title: p.title,
+        description: p.description,
+        category: p.category,
+        price: Number(p.price),
+        image: p.image,
+      }));
+
+      // Merge both
+      return [...firestoreProducts, ...apiProducts];
     },
   });
 };

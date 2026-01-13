@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 interface CartItem {
-  id: number;        // <-- Firestore id
+  id: string;
   title: string;
   price: number;
   quantity: number;
@@ -13,9 +13,10 @@ interface CartState {
   items: CartItem[];
 }
 
-const savedCart = sessionStorage.getItem("cart");
+const saved = sessionStorage.getItem("cart");
+
 const initialState: CartState = {
-  items: savedCart ? JSON.parse(savedCart) : [],
+  items: saved ? JSON.parse(saved) : [],
 };
 
 const cartSlice = createSlice({
@@ -23,31 +24,23 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addItem: (state, action: PayloadAction<CartItem>) => {
-      const existingItem = state.items.find(
-        (item) => item.id === action.payload.id
-      );
-
-      if (existingItem) {
-        existingItem.quantity += action.payload.quantity;
+      const item = state.items.find((i) => i.id === action.payload.id);
+      if (item) {
+        item.quantity += action.payload.quantity;
       } else {
         state.items.push(action.payload);
       }
     },
-
     removeItem: (state, action: PayloadAction<string>) => {
-      state.items = state.items.filter((item) => item.id !== action.payload);
+      state.items = state.items.filter((i) => i.id !== action.payload);
     },
-
     updateQuantity: (
       state,
       action: PayloadAction<{ id: string; quantity: number }>
     ) => {
-      const item = state.items.find((item) => item.id === action.payload.id);
-      if (item) {
-        item.quantity = action.payload.quantity;
-      }
+      const i = state.items.find((it) => it.id === action.payload.id);
+      if (i) i.quantity = action.payload.quantity;
     },
-
     clearCart: (state) => {
       state.items = [];
     },
