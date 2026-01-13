@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 interface CartItem {
-  id: string;        // <-- Firestore id
+  id: number;        // <-- Firestore id
   title: string;
   price: number;
   quantity: number;

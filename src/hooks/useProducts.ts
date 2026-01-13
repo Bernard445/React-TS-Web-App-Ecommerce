@@ -22,14 +22,13 @@ export const useProducts = () => {
       const fsProducts = snap.docs.map((docSnap) => {
         const data = docSnap.data();
         return {
-          id: String(docSnap.id),
+          id: Number(docSnap.id),
           title: String(data.title),
           description: String(data.description),
           category: String(data.category),
           price: Number(data.price),
           image: String(data.image),
-          source: "firestore" as const,
-        };
+          source: "firestore" as const,};
       });
 
       // 3️⃣ Combine without duplicates

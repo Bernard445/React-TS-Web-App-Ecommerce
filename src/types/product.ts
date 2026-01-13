@@ -1,8 +1,17 @@
 export interface Product {
-  id: string;     // Firestore document ID
+  id: number;
   title: string;
   price: number;
   category: string;
   description: string;
   image: string;
+}
+export interface FirestoreProduct {
+  id: string;
+  title: string;
+  price: number;
+  category: string;
+  description: string;
+  image: string;
+  source: "firestore";
 }
