@@ -29,22 +29,28 @@ const Home: React.FC = () => {
 
       <h1>Product List</h1>
 
-      <ul>
-        {filteredProducts?.map((product: Product) => (
-          <li key={product.id}>
-            <h2>{product.title}</h2>
-            <p>{product.description}</p>
-            <p>Category: {product.category}</p>
-            <p>Price: ${Number(product.price ?? 0)}</p>
-            <img src={product.image} alt={product.title} width={100} />
+     <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
+        {filteredProducts?.map((product) => (
+          <li
+            key={product.id}
+            className="bg-white rounded shadow-md p-4 text-center flex flex-col"
+          >
+            <img
+              className="h-32 mx-auto mb-3 object-contain"
+              src={product.image}
+              alt={product.title}
+            />
+            <h2 className="font-bold">{product.title}</h2>
+            <p className="text-xs text-gray-500 line-clamp-2">{product.description}</p>
+            <p className="font-semibold my-2">${product.price}</p>
 
-            <button
+            <button className="mt-auto bg-blue-500 text-white py-1 rounded hover:bg-blue-600"
               onClick={() =>
                 dispatch(
                   addItem({
-                    id: Number(product.id),
+                    id: product.id,
                     title: product.title,
-                    price: Number(product.price ?? 0),
+                    price: product.price,
                     quantity: 1,
                     image: product.image,
                   })
@@ -54,22 +60,20 @@ const Home: React.FC = () => {
               Add to Cart
             </button>
 
-
             <button
+              className="mt-2 bg-red-500 text-white py-1 rounded hover:bg-red-600"
               onClick={async () => {
-                await deleteDoc(doc(db, "products", String(product.id)));
-
+                await deleteDoc(doc(db, "products", product.id));
                 alert("Product Deleted!");
-
-                // 👇 OPTIONALLY force refresh React Query
                 window.location.reload();
               }}
             >
-              Delete Product
+              Delete
             </button>
           </li>
         ))}
       </ul>
+
     </div>
   );
 };

@@ -1,5 +1,5 @@
 export interface Product {
-  id: number;
+  id: string;     // Firestore document ID
   title: string;
   price: number;
   category: string;

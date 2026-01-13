@@ -13,7 +13,7 @@ export const useProducts = () => {
         const data = docSnap.data();
 
         return {
-          id: Number(docSnap.id),
+          id: docSnap.id,  // ✔ Firestore document ID
           title: String(data.title),
           description: String(data.description),
           category: String(data.category),
@@ -21,7 +21,6 @@ export const useProducts = () => {
           image: String(data.image),
         };
       });
-
     },
   });
-}
+};
