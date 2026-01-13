@@ -4,36 +4,38 @@ import Cart from "./components/Cart";
 import { auth, db } from "./firebase/firebase.config";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
-import { signOut } from "firebase/auth";
 import Profile from "./pages/Profile";
 import AddProduct from "./pages/AddProduct";
 import EditProduct from "./pages/EditProduct";
 import Orders from "./pages/Orders";
 import OrderDetails from "./pages/OrderDetails";
-
-
+import Layout from "./components/Layout";
+import { signOut } from "firebase/auth";
 
 const LogoutButton = () => (
-  <button onClick={() => signOut(auth)}>Logout</button>
+  <button 
+    onClick={() => signOut(auth)}
+    className="ml-2 text-red-500 hover:text-red-600"
+  >
+    Logout
+  </button>
 );
-
-console.log("Auth Loaded:", auth);
-console.log("DB Loaded:", db);
 
 const App = () => {
   return (
-    <>
-      <nav style={{ padding: "10px", borderBottom: "1px solid #ccc" }}>
-        <Link to="/" style={{ marginRight: "10px" }}>Home</Link>
-        <Link to="/cart" style={{ marginRight: "10px" }}>Cart</Link>
-        <Link to="/signup" style={{ marginRight: "10px" }}>Signup</Link>
-        <Link to="/login" style={{ marginRight: "10px" }}>Login</Link>
-        <Link to="/profile" style={{ marginRight: "10px" }}>Profile</Link>
+    <Layout>
+      <nav className="flex gap-4 p-4 border-b mb-4">
+        <Link to="/">Home</Link>
+        <Link to="/cart">Cart</Link>
+        <Link to="/signup">Signup</Link>
+        <Link to="/login">Login</Link>
+        <Link to="/profile">Profile</Link>
         <Link to="/add-product">Add Product</Link>
-        <Link to="/orders" style={{ marginRight: "10px" }}>Orders</Link>
+        <Link to="/orders">Orders</Link>
         <LogoutButton />
       </nav>
 
+      {/* ⭐ Routes MUST be wrapped here */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/cart" element={<Cart />} />
@@ -45,7 +47,7 @@ const App = () => {
         <Route path="/orders" element={<Orders />} />
         <Route path="/orders/:id" element={<OrderDetails />} />
       </Routes>
-    </>
+    </Layout>
   );
 };
 
