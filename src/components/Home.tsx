@@ -13,67 +13,88 @@ const Home: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const dispatch = useDispatch<AppDispatch>();
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
+  if (isLoading) return <div className="text-center mt-10">Loading...</div>;
+  if (error) return <div className="text-center mt-10">Error loading products</div>;
 
+  // Filter if category selected
   const filteredProducts = selectedCategory
-  ? products?.filter((product: Product) =>
-      product.category?.toLowerCase() === selectedCategory.toLowerCase()
-    )
-  : products;
-
+    ? products?.filter((p: Product) =>
+        p.category?.toLowerCase() === selectedCategory.toLowerCase()
+      )
+    : products;
 
   return (
-    <div>
-      <CategorySelect onCategoryChange={setSelectedCategory} />
+    <div className="p-6 max-w-6xl mx-auto">
+      <h1 className="text-3xl font-bold mb-4 text-center">Products</h1>
 
-      <h1>Product List</h1>
+      {/* Category Filter */}
+      <div className="mb-6">
+        <CategorySelect onCategoryChange={setSelectedCategory} />
+      </div>
 
-     <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
-        {filteredProducts?.map((product) => (
+      {/* Product Grid */}
+      <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {filteredProducts?.map((product: Product) => (
           <li
             key={product.id}
-            className="bg-white rounded shadow-md p-4 text-center flex flex-col"
+            className="border rounded-lg p-4 shadow hover:shadow-lg transition bg-white flex flex-col"
           >
             <img
-              className="h-32 mx-auto mb-3 object-contain"
               src={product.image}
               alt={product.title}
+              className="w-full h-48 object-contain mb-3"
             />
-            <h2 className="font-bold">{product.title}</h2>
-            <p className="text-xs text-gray-500 line-clamp-2">{product.description}</p>
-            <p className="font-semibold my-2">${product.price}</p>
 
-            <button className="mt-auto bg-blue-500 text-white py-1 rounded hover:bg-blue-600"
+            <h2 className="text-lg font-semibold">{product.title}</h2>
+            <p className="text-sm text-gray-600 mb-2">{product.description}</p>
+            <p className="text-sm text-blue-700 font-medium">
+              Category: {product.category}
+            </p>
+            <p className="text-lg font-bold text-green-600 mb-3">
+              ${Number(product.price).toFixed(2)}
+            </p>
+
+            {/* Add To Cart */}
+            <button
               onClick={() =>
                 dispatch(
                   addItem({
-                    id: product.id,
+                    id: Number(product.id),
                     title: product.title,
-                    price: product.price,
+                    price: Number(product.price),
                     quantity: 1,
                     image: product.image,
                   })
                 )
               }
+              className="bg-blue-600 text-white py-1 rounded hover:bg-blue-700"
             >
               Add to Cart
             </button>
 
-            <button
-              className="mt-2 bg-red-500 text-white py-1 rounded hover:bg-red-600"
-              onClick={async () => {
-                await deleteDoc(doc(db, "products", product.id));
-                alert("Product Deleted!");
-                window.location.reload();
-              }}
-            >
-              Delete
-            </button>
+            {/* Delete only Firestore */}
+            {product.source === "firestore" ? (
+              <button
+                onClick={async () => {
+                  await deleteDoc(doc(db, "products", String(product.id)));
+                  alert("Product Deleted!");
+                  window.location.reload();
+                }}
+                className="bg-red-600 text-white py-1 rounded mt-2 hover:bg-red-700"
+              >
+                Delete Product
+              </button>
+            ) : (
+              <button
+                disabled
+                className="bg-gray-400 text-white py-1 rounded mt-2 cursor-not-allowed"
+              >
+                API Product
+              </button>
+            )}
           </li>
         ))}
       </ul>
-
     </div>
   );
 };
