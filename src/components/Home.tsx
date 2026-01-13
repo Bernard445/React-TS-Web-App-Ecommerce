@@ -42,7 +42,7 @@ const Home: React.FC = () => {
               onClick={() =>
                 dispatch(
                   addItem({
-                    id: String(product.id),
+                    id: Number(product.id),
                     title: product.title,
                     price: Number(product.price ?? 0),
                     quantity: 1,

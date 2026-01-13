@@ -13,14 +13,15 @@ export const useProducts = () => {
         const data = docSnap.data();
 
         return {
-          id: docSnap.id,
+          id: Number(docSnap.id),
           title: String(data.title),
           description: String(data.description),
           category: String(data.category),
-          price: Number(data.price ?? 0),
+          price: Number(data.price),
           image: String(data.image),
         };
       });
+
     },
   });
-};
+}
