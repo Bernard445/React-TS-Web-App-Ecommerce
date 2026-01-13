@@ -17,7 +17,7 @@ export const useProducts = () => {
           title: String(data.title),
           description: String(data.description),
           category: String(data.category),
-          price: Number(data.price),         // 👈 FIX HERE
+          price: Number(data.price ?? 0),
           image: String(data.image),
         };
       });
