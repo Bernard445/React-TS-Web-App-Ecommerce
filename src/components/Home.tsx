@@ -35,7 +35,7 @@ const Home: React.FC = () => {
             <h2>{product.title}</h2>
             <p>{product.description}</p>
             <p>Category: {product.category}</p>
-            <p>Price: ${Number(product.price)}</p>
+            <p>Price: ${Number(product.price ?? 0)}</p>
             <img src={product.image} alt={product.title} width={100} />
 
             <button
